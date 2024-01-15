@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "Saisissez l'adresse IP à localiser (ou tapez 'fin' pour quitter) "
+read adresseIP
+
+if [ "$adresseIP" == "fin" ]; then
+    exit 1
+fi
+
+api="http://ip-api.com/json/$adresseIP"
+
+resultats=$(curl -s "$api")
+
+echo "-------------------------------------------------------------"
+echo "Résultats de la géolocalisation pour l'adresse IP $adresseIP :"
+echo "Pays : $(echo "$resultats" | jq -r '.country')"
+echo "Région : $(echo "$resultats" | jq -r '.regionName')"
+echo "Ville : $(echo "$resultats" | jq -r '.city')"
+echo "Code Postal : $(echo "$resultats" | jq -r '.zip')"
+echo "Latitude : $(echo "$resultats" | jq -r '.lat')"
+echo "Longitude : $(echo "$resultats" | jq -r '.lon')"
+echo "FAI : $(echo "$resultats" | jq -r '.isp')"
+echo "-------------------------------------------------------------"
+
+read -p "Appuyez sur Entrée pour continuer"
+
+exit 0
