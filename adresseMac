@@ -1,0 +1,23 @@
+#!/bin/bash
+if [ "$EUID" -ne 0 ]; then
+    echo "Ce script doit être exécuté en tant qu'administrateur (utilisez sudo)."
+    exit 1
+fi
+
+echo "Interfaces réseau disponibles:"
+ip link show | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}'
+
+echo -n "Entrez le nom de l'interface réseau à configurer (par exemple, eth0): "
+read interface
+
+echo -n "Entrez la nouvelle adresse MAC (format : XX:XX:XX:XX:XX:XX): "
+read newMac
+
+ip link set dev "$interface" down
+
+ip link set dev "$interface" address "$newMac"
+
+ip link set dev "$interface" up
+
+echo "Adresse MAC changée avec succès pour $interface."
+pour le changement d adresse mac eme si je capte R
